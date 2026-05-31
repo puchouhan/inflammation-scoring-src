@@ -1,0 +1,35 @@
+# Swin Transformer Model Configuration
+# Hierarchical vision transformer with shifted windows
+
+# Override img_size: Swin requires 224 (224/4=56 patches, 56/7=8 windows, ganzzahlig)
+data:
+  img_size: 224
+
+model:
+  backbone: "swin_tiny_patch4_window7_224"  # TIMM model name (~29M params)
+  pretrained: true
+  
+  # Model-specific hyperparameters
+  drop_rate: 0.0                     # Dropout rate
+  drop_path_rate: 0.2                # Stochastic depth rate (higher for Swin)
+  attn_drop_rate: 0.0                # Attention dropout
+  
+  # Swin-Tiny architecture details
+  patch_size: 4                      # Patch size (4x4 pixels)
+  window_size: 7                     # Window size for local attention
+  embed_dim: 96                      # Embedding dimension (Tiny)
+  depths: [2, 2, 6, 2]              # Depth of each stage (Tiny)
+  num_heads: [3, 6, 12, 24]          # Heads per stage (Tiny)
+  
+  notes:
+    - "Swin-Tiny: Hierarchical transformer with shifted windows"
+    - "Local attention within windows (efficient)"
+    - "Window shifting for cross-window connections"
+    - "Parameters: ~29M (comparable to ConvNeXt-Tiny ~28M)"
+    - "Requires img_size=224 (window_size=7 constraint)"
+
+  # Alternative backbones
+  alternatives:
+    - "swin_small_patch4_window7_224"   # Smaller variant (~50M params)
+    - "swin_base_patch4_window7_224"    # Base variant (~88M params)
+    - "swinv2_base_window8_256"         # Swin V2 with larger windows

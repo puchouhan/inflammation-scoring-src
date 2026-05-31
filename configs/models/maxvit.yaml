@@ -1,0 +1,30 @@
+# MaxViT Model Configuration
+# Hybrid CNN + Transformer architecture
+
+# Override img_size: MaxViT uses fixed 224x224 grid partitioning
+data:
+  img_size: 224
+
+model:
+  backbone: "maxvit_tiny_rw_224"  # TIMM model name (valid)
+  pretrained: true
+  
+  # Model-specific hyperparameters (anti-overfitting measures)
+  drop_rate: 0.1                    # Added dropout to reduce overfitting
+  drop_path_rate: 0.3               # Increased from 0.2 for stronger regularization
+  
+  # Architecture details (for reference)
+  notes:
+    - "MaxViT-Tiny: Hybrid CNN + Multi-axis Transformer"
+    - "Combines convolutions (local features) with attention (global context)"
+    - "Block attention + Grid attention for efficiency"
+    - "OPTIMAL for inflammation: Captures cells (local) and distribution (global)"
+    - "Parameters: ~31M"
+    - "Best performance on cell counting tasks"
+    - "Handles variable cell densities well"
+
+  # Alternative backbones (comment out to use)
+  alternatives:
+    - "maxvit_nano_224"         # Smaller (~15M params)
+    - "maxvit_small_224"        # Larger (~69M params)
+    - "coatnet_nano_224"        # Related hybrid architecture

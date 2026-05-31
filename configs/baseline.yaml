@@ -1,0 +1,71 @@
+# Original Paper Baseline Performance
+# Source: Heinemann et al. (2018), PLOS ONE
+# "Deep neural network based histological scoring of lung fibrosis and inflammation in the mouse model system"
+# https://doi.org/10.1371/journal.pone.0202708
+
+baseline:
+  paper:
+    title: "Deep neural network based histological scoring of lung fibrosis and inflammation in the mouse model system"
+    authors: "Heinemann, Birk, Schönberger, Stierstorfer"
+    year: 2018
+    journal: "PLOS ONE"
+    doi: "10.1371/journal.pone.0202708"
+  
+  model:
+    name: "InceptionV3"
+    architecture: "InceptionV3 CNN (ImageNet pretrained)"
+    framework: "Keras/TensorFlow"
+    input_size: 
+      original: "512×512"
+      resized: "299×299"  # Automatically resized by Keras
+    
+  training:
+    num_tiles: 3500  # Manually labeled tiles
+    train_split: 0.9  # 90% training, 10% validation
+    augmentation: "Random rotation (-45° to 45°), vertical flip"
+    optimizer: "SGD"
+    learning_rate: 
+      initial: 0.00005  # 5e-5
+      decay: "Factor 1/5 down to 1e-7"
+    
+  classes:
+    - id: 0
+      description: "0-5 inflammatory cells"
+    - id: 1
+      description: "6-10 inflammatory cells"
+    - id: 2
+      description: "11-20 inflammatory cells"
+    - id: 3
+      description: ">21 inflammatory cells"
+    - id: 4
+      description: "Ignore (non-alveolar tissue)"
+  
+  # Performance metrics from original paper
+  performance:
+    accuracy: 0.800  # 80.0% on validation set
+    
+    # Per-class accuracy from confusion matrix (Fig 8)
+    # These are approximations from the paper's confusion matrix
+    per_class:
+      class_0: 0.85  # ~85% correct classification
+      class_1: 0.78  # ~78% correct classification
+      class_2: 0.69  # 69% correct (most difficult class)
+      class_3: 0.82  # ~82% correct classification
+    
+    # Inter-annotator agreement
+    human_agreement: 0.645  # 64.5% agreement between 2 expert annotators
+    cnn_agreement: 0.800    # 80.0% CNN vs ground truth
+    
+    notes:
+      - "Misclassifications almost exclusively with neighboring classes"
+      - "CNN more consistent than human experts (80.0% vs 64.5%)"
+      - "Class 2 (11-20 cells) most difficult to classify"
+      - "No explicit QWK/F1 scores reported in original paper"
+      - "Validation set not used for training"
+  
+  comparison_notes:
+    - "Original used 512×512 tiles, current work uses 256×256"
+    - "Original trained on 3500 tiles, current may use more/less"
+    - "Original used InceptionV3, current explores modern architectures"
+    - "Original reported accuracy only, current also tracks QWK, F1, Precision/Recall"
+    - "Current implementation uses PyTorch Lightning vs Keras"

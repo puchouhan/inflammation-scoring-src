@@ -1,0 +1,35 @@
+# DINO run configuration (compatibility mode in current runner)
+# NOTE:
+# The current training runner uses a classification pipeline for all models,
+# including `dino`. This file defines explicit settings so base-config fallback
+# warnings are avoided and run metadata remains reproducible.
+#
+# In compatibility mode, DINO runs as a supervised ViT-Tiny via InflammationModel.
+# The true DINO SSL pipeline (student-teacher, momentum EMA, multi-crop) is
+# implemented in src/models/dino_model.py but not wired into runner.py yet.
+
+data:
+  img_size: 224                       # ViT requires exactly 224x224 input
+
+model:
+  name: "dino"
+  backbone: "vit_tiny_patch16_224"    # TIMM model name (ViT-Tiny, ~5.7M params)
+  pretrained: true
+
+  # Regularization for tiny model on small dataset
+  drop_rate: 0.1
+  drop_path_rate: 0.1
+  attn_drop_rate: 0.05
+
+  # ViT-Tiny architecture details (for reference)
+  patch_size: 16                      # Patch size (16x16 pixels)
+  embed_dim: 192                      # Embedding dimension (vs 384 for Small, 768 for Base)
+  depth: 12                           # Number of transformer blocks
+  num_heads: 3                        # Number of attention heads (vs 6 for Small, 12 for Base)
+
+  notes:
+    - "Current runner executes dino label in classification compatibility mode"
+    - "Backbone (ViT-Tiny) and classification head are trained end-to-end"
+    - "True DINO SSL pipeline (student-teacher EMA, multi-crop, centering) is implemented in dino_model.py but not wired in runner.py yet"
+    - "ViT-Tiny is significantly smaller than ViT-Small (5.7M vs 22M params)"
+    - "Lower dropout than ViT-Small since ViT-Tiny has less capacity to overfit"

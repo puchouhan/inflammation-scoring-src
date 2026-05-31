@@ -1,0 +1,23 @@
+# EfficientNetV2 Model Configuration
+# Optimized for efficiency and accuracy
+
+model:
+  backbone: "efficientnetv2_rw_s"  # TIMM model name
+  pretrained: true
+  
+  # Model-specific hyperparameters
+  drop_rate: 0.2                    # Dropout rate
+  drop_path_rate: 0.2               # Stochastic depth rate
+  
+  # Architecture details (for reference)
+  notes:
+    - "EfficientNetV2-S: Smaller, faster variant"
+    - "Uses Fused-MBConv blocks for efficiency"
+    - "Progressive training with adaptive regularization"
+    - "Parameters: ~24M"
+
+  # Alternative backbones (comment out to use)
+  alternatives:
+    - "efficientnetv2_rw_m"         # Medium variant (~54M params)
+    - "efficientnetv2_rw_t"         # Tiny variant (~13M params)
+    - "tf_efficientnetv2_s"         # TensorFlow weights

@@ -1,0 +1,33 @@
+# Vision Transformer (ViT) Model Configuration
+# Pure transformer architecture for image classification
+
+data:
+  img_size: 224                      # ViT requires exactly 224x224 input
+
+model:
+  backbone: "vit_small_patch16_224"  # TIMM model name (Small reduces overfitting compared to base)
+  pretrained: true
+  
+  # Model-specific hyperparameters (Crucial for ViT on small dataset)
+  drop_rate: 0.2                     # Dropout rate (erhöht für kleine Datenmengen)
+  drop_path_rate: 0.2                # Stochastic depth rate 
+  attn_drop_rate: 0.1                # Attention dropout
+  
+  # ViT architecture details
+  patch_size: 16                     # Patch size (16x16 pixels)
+  embed_dim: 768                     # Embedding dimension
+  depth: 12                          # Number of transformer blocks
+  num_heads: 12                      # Number of attention heads
+  
+  notes:
+    - "ViT-Base: Standard Vision Transformer"
+    - "Patch-based tokenization (16x16 patches)"
+    - "Global self-attention across all patches"
+    - "Parameters: ~86M"
+    - "Requires good amount of data or pretraining"
+
+  # Alternative backbones
+  alternatives:
+    - "vit_small_patch16_224"       # Smaller variant (~22M params)
+    - "vit_tiny_patch16_224"        # Tiny variant (~5M params)
+    - "vit_base_patch32_224"        # Larger patches (faster, less detail)

@@ -1,0 +1,50 @@
+# DenseNet Model Configuration
+# Baseline CNN for comparison with modern architectures
+#
+# Parameter Justification (Literature-Based Defaults):
+# ====================================================
+# Shared params (base.yaml) -- apply to ALL 11 models for fair comparison:
+#   lr=1e-4:       De-facto standard for fine-tuning pretrained CNNs
+#                  (Kather et al. 2019, Ciga et al. 2022, He et al. 2019)
+#   AdamW:         Superior to Adam for fine-tuning (Loshchilov & Hutter 2019)
+#   wd=1e-4:       Standard regularization for pretrained CNNs (He et al. 2019,
+#                  Kather et al. 2019). Increased from 1e-5 to counter overfitting
+#                  observed with N=3 animal cohort (acc gap up to 0.64).
+#   batch_size=32: Standard for 256x256 histopathology patches on modern GPUs
+#   ReduceOnPlateau (factor=0.5, patience=5): Safe adaptive scheduler
+#
+# Model-specific params (this file):
+#   drop_rate=0.2: DenseNet original paper (Huang et al. 2017, Table 3)
+#                  recommends 0.2 for augmented datasets. Provides
+#                  regularization at the dense block level.
+#   drop_path_rate=0.0: Stochastic depth (Huang et al. 2016) is designed
+#                       for residual networks, not dense connectivity.
+#                       DenseNet's dense connections already provide
+#                       implicit ensemble effects.
+#
+# HPO was deliberately skipped (see README Section 9):
+#   - Fair architectural comparison requires identical hyperparameters
+#   - Risk of HPO overfitting with N=3 animals
+#   - These literature defaults are robust for transfer learning
+
+model:
+  backbone: "densenet121"  # TIMM model name
+  pretrained: true
+  
+  # Model-specific hyperparameters
+  drop_rate: 0.2                    # Huang et al. 2017, Table 3
+  drop_path_rate: 0.0               # Not applicable to dense connectivity
+  
+  # Architecture details (for reference)
+  notes:
+    - "DenseNet121: Established baseline CNN architecture"
+    - "Dense connectivity: Each layer connected to all previous layers"
+    - "Feature reuse reduces parameters (~8M)"
+    - "Good for small datasets due to parameter efficiency"
+    - "Used as reference/baseline for comparing modern architectures"
+    - "Pretrained on ImageNet-1k (TIMM default weights)"
+
+  # Alternative backbones (comment out to use)
+  alternatives:
+    - "densenet169"   # Deeper variant (~14M params)
+    - "densenet201"   # Even deeper (~20M params)

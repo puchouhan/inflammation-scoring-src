@@ -1,0 +1,25 @@
+# ConvNeXt Model Configuration
+# State-of-the-art CNN architecture (2022)
+
+model:
+  backbone: "convnext_tiny"  # TIMM model name
+  pretrained: true
+  
+  # Model-specific hyperparameters
+  drop_rate: 0.0                    # Not used in ConvNeXt (uses drop_path instead)
+  drop_path_rate: 0.1               # Stochastic depth rate (key regularization)
+  
+  # Architecture details (for reference)
+  notes:
+    - "ConvNeXt-Tiny: Modernized ResNet with Transformer design principles"
+    - "Pure CNN but incorporates Transformer design choices"
+    - "Excellent for histology: Strong local feature extraction"
+    - "Parameters: ~28M"
+    - "Better than EfficientNet on medical imaging tasks"
+    - "Hierarchical features like Swin but with convolutions"
+
+  # Alternative backbones (comment out to use)
+  alternatives:
+    - "convnext_nano"       # Smaller (~15M params)
+    - "convnext_small"      # Larger (~50M params)
+    - "convnext_base"       # Even larger (~89M params)

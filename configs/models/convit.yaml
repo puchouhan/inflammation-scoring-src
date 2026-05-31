@@ -1,0 +1,38 @@
+# ConViT (Convolutional Vision Transformer) Model Configuration
+# Hybrid CNN-Transformer with soft convolutional inductive bias
+
+data:
+  img_size: 224                      # ConViT TIMM backbones expect 224x224 input
+
+model:
+  backbone: "convit_tiny"            # TIMM model name
+  pretrained: true
+  
+  # Model-specific hyperparameters
+  drop_rate: 0.1                     # Dropout rate
+  drop_path_rate: 0.1                # Stochastic depth rate
+  attn_drop_rate: 0.0                # Attention dropout
+  
+  # ConViT-specific parameters
+  local_up_to_layer: 10              # Use local (CNN-like) attention up to this layer
+  locality_strength: 1.0             # Strength of locality bias
+  
+  # Architecture details
+  patch_size: 16                     # Patch size
+  embed_dim: 192                     # Embedding dimension (tiny variant)
+  depth: 12                          # Number of transformer blocks
+  num_heads: 3                       # Number of attention heads
+  
+  notes:
+    - "ConViT-Tiny: Hybrid CNN-Transformer architecture"
+    - "Gradually transitions from CNN-like to Transformer behavior"
+    - "Soft convolutional inductive bias (learned, not hard-coded)"
+    - "Parameters: ~6M (very efficient!)"
+    - "Good for smaller datasets"
+    - "First layers: local attention (CNN-like)"
+    - "Later layers: global attention (Transformer-like)"
+
+  # Alternative backbones
+  alternatives:
+    - "convit_small"                 # Smaller variant (~28M params)
+    - "convit_base"                  # Base variant (~86M params)

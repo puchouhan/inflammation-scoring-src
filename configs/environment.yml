@@ -1,0 +1,43 @@
+name: inflammation_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12.12
+  - pip
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - jupyter
+  - ipykernel
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-lightning
+  - tensorboard
+  - optuna
+  - pip:
+      - albumentations
+      - timm
+      - torchmetrics
+      - PyYAML
+      - tqdm
+      - opencv-python
+      - wandb
+      - pytest
+      - pytest-cov
+      - pyyaml
+      - rich
+      - tabulate
+      - scikit-image
+      - jupyterlab
+      - ipywidgets
+      - black
+      - isort
+      - pre-commit
+      - types-PyYAML
+      - types-tqdm
+      - types-tabulate
+      - types-requests

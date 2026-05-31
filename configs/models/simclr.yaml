@@ -1,0 +1,19 @@
+# SimCLR run configuration (compatibility mode in current runner)
+# NOTE:
+# The current training runner uses a classification pipeline for all models,
+# including `simclr`. This file defines explicit settings so base-config fallback
+# warnings are avoided and run metadata remains reproducible.
+
+model:
+  name: "simclr"
+  backbone: "resnet50"
+  pretrained: true
+
+  # Kept explicit for compatibility with InflammationModel/TIMM creation path.
+  drop_rate: 0.0
+  drop_path_rate: 0.0
+
+  notes:
+    - "Current runner executes simclr label in classification compatibility mode"
+    - "Backbone and classification head are trained end-to-end"
+    - "True SimCLR SSL pipeline (encoder + projection head contrastive training) is not wired in runner.py yet"

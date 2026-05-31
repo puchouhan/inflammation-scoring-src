@@ -1,0 +1,28 @@
+# RegNetY Model Configuration
+# Efficient CNN designed through network design space exploration
+
+model:
+  backbone: "regnety_032"            # TIMM model name
+  pretrained: true
+  
+  # Model-specific hyperparameters
+  drop_rate: 0.2                     # Dropout rate
+  drop_path_rate: 0.15               # Stochastic depth rate
+  
+  # RegNetY architecture details
+  width_mult: 1.0                    # Width multiplier
+  depth_mult: 1.0                    # Depth multiplier
+  
+  notes:
+    - "RegNetY-3.2GF: Optimized through design space search"
+    - "Uses group convolutions and squeeze-excitation"
+    - "Good efficiency-accuracy trade-off"
+    - "Parameters: ~19M"
+    - "Y variant includes SE (Squeeze-and-Excitation) blocks"
+
+  # Alternative backbones
+  alternatives:
+    - "regnety_016"                  # Smaller variant (~11M params, 1.6GF)
+    - "regnety_040"                  # Larger variant (~21M params, 4.0GF)
+    - "regnety_080"                  # Much larger (~39M params, 8.0GF)
+    - "regnetx_032"                  # X variant (without SE blocks)

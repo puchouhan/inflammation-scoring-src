@@ -1,0 +1,99 @@
+seed: 42
+num_classes: 5
+ignore_class_index: 4
+models_to_train:
+  - dino
+  # - vit
+data:
+  raw_dir: dataset
+  norm_dir: dataset_norm
+  img_size: 256
+  batch_size: 32
+  num_workers: 4
+  loss:
+    name: ordinal_smoothing
+    smoothing_factor: 0.1
+  cv_strategy: loao_balanced
+  cv_folds_config:
+    loao_balanced: 2
+    random_stratified: 5
+    # n_folds is auto-calculated from cv_strategy - DO NOT hardcode here!
+  exclude_animals:
+  - '15_304'
+directories:
+  project_root: .
+  runs_dir: runs
+  experiments_dir: experiments
+  registry_dir: src/experiments
+  test_evaluation_subdir: test_evaluation
+  checkpoints_subdir: checkpoints
+  figures_subdir: figures
+  tensorboard_subdir: tensorboard
+logging:
+  log_dir: results/logs
+  experiment_name: inflammation_classification
+  val_metrics_only: false
+  save_predictions: true
+  save_visualizations: true
+  output_mode: both
+training:
+  max_epochs: 50
+  learning_rate: 0.0001
+  weight_decay: 1.0e-04
+  patience: 5
+  min_delta: 0.002
+  optimizer:
+    type: adamw
+    betas:
+    - 0.9
+    - 0.999
+    eps: 1e-8
+  scheduler:
+    type: reduce_on_plateau
+    factor: 0.5
+    patience: 5
+    min_lr: 1e-7
+  early_stopping_patience: 10
+  momentum: 0.9
+hpo:
+  mode: skip
+  search_mode: model_specific
+  models: []
+  n_trials: 50
+  n_folds: 3
+  min_epochs_per_trial: 15
+  max_epochs_per_trial: 30
+  storage: sqlite:///optuna_study.db
+  search_space:
+    learning_rate:
+      min: 1e-5
+      max: 5e-4
+      log: true
+    weight_decay:
+      min: 1e-6
+      max: 1e-3
+      log: true
+    beta1:
+      min: 0.85
+      max: 0.95
+    beta2:
+      min: 0.99
+      max: 0.999
+    scheduler_patience:
+      min: 3
+      max: 7
+    batch_size:
+      options:
+      - 16
+      - 32
+      - 64
+    drop_rate:
+      min: 0.0
+      max: 0.3
+    backbones:
+    - densenet121
+    - efficientnetv2_rw_s
+    - regnety_002
+    - convnext_tiny
+    - swin_tiny_patch4_window7_224
+    - maxvit_tiny_224

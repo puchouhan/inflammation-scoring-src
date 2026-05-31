@@ -1,0 +1,10 @@
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.so
+.DS_Store
+*.egg-info/
+.env
+*.db
+hpo_results/
+*.log

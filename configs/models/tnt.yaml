@@ -1,0 +1,41 @@
+# TNT (Transformer in Transformer) Model Configuration
+# Nested transformer architecture with pixel-level and patch-level transformers
+
+# Override img_size: TNT uses fixed positional embeddings trained at 224x224
+data:
+  img_size: 224
+
+model:
+  backbone: "tnt_s_patch16_224"      # TIMM model name
+  pretrained: true
+  
+  # Model-specific hyperparameters
+  drop_rate: 0.1                     # Dropout rate
+  drop_path_rate: 0.1                # Stochastic depth rate
+  attn_drop_rate: 0.0                # Attention dropout
+  
+  # TNT-specific parameters
+  patch_size: 16                     # Outer patch size (16x16 pixels)
+  pixel_size: 4                      # Inner pixel size (4x4 sub-patches)
+  
+  # Architecture details
+  outer_dim: 384                     # Patch embedding dimension
+  inner_dim: 24                      # Pixel embedding dimension
+  outer_depth: 12                    # Number of outer transformer blocks
+  inner_depth: 4                     # Number of inner transformer blocks per patch
+  outer_num_heads: 6                 # Heads for patch-level attention
+  inner_num_heads: 4                 # Heads for pixel-level attention
+  
+  notes:
+    - "TNT-Small: Nested Transformer architecture"
+    - "Two-level hierarchy:"
+    - "  1. Inner Transformer: models relationships between pixels within patches"
+    - "  2. Outer Transformer: models relationships between patches"
+    - "More fine-grained than standard ViT"
+    - "Parameters: ~24M"
+    - "Good for capturing both local and global features"
+    - "Higher computational cost than ViT"
+
+  # Alternative backbones
+  alternatives:
+    - "tnt_b_patch16_224"            # Base variant (~66M params)
